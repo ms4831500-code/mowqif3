@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <title>موقف سامحت فيه شخص</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --bg:#f3f6fb;
+      --card:#ffffff;
+      --accent:#0b84ff;
+      --success:#0ea36b;
+      --text:#222;
+    }
+    html,body{height:100%;margin:0;padding:0;font-family:Tahoma, Arial, sans-serif;background:var(--bg);direction:rtl}
+    .wrap{min-height:100%;display:flex;align-items:center;justify-content:center;padding:24px}
+    .card{width:100%;max-width:720px;background:var(--card);border-radius:12px;padding:28px;box-shadow:0 8px 30px rgba(15,23,42,0.07)}
+    h1{margin:0 0 8px;text-align:center;color:var(--text);font-size:22px}
+    p.lead{margin:0 0 18px;text-align:center;color:#555}
+    label{display:block;margin:12px 0 6px;color:#333;font-size:14px}
+    input[type="text"]{width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;font-size:15px;box-sizing:border-box}
+    textarea{width:100%;min-height:180px;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:15px;resize:vertical;box-sizing:border-box}
+    .actions{display:flex;gap:10px;align-items:center;justify-content:flex-start;margin-top:14px}
+    button{background:var(--accent);color:#fff;border:none;padding:10px 16px;border-radius:8px;cursor:pointer;font-size:15px}
+    button.secondary{background:#6b7280}
+    .note{color:#666;margin-top:12px;font-size:13px}
+    .toast{display:none;margin-top:12px;padding:10px;border-radius:8px;background:rgba(14,163,107,0.12);color:var(--success);font-weight:600}
+    @media (max-width:520px){.card{padding:18px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>موقف سامحت فيه شخص</h1>
+      <p class="lead">اكتب موقفك بصراحة، ثم اضغط إرسال ليصلك عبر البريد</p>
+
+      <!--
+        استبدل البريد التالي بعنوانك الفعلي:
+        mailto:ms4831500-code@example.com
+      -->
+      <form id="mowqifForm" action="mailto:ms4831500@gmail.com" method="POST" enctype="text/plain">
+        <label for="name">الاسم (اختياري)</label>
+        <input id="name" name="name" type="text" placeholder="اكتب اسمك إن أردت" />
+
+        <label for="story">اكتب موقفك هنا</label>
+        <textarea id="story" name="story" placeholder="اكتب موقفاً سامحت فيه شخص..." required></textarea>
+
+        <div class="actions">
+          <button id="sendBtn" type="submit">إرسال عبر البريد</button>
+          <button id="copyBtn" type="button" class="secondary">نسخ النص</button>
+        </div>
+
+        <div id="toast" class="toast">تم نسخ النص إلى الحافظة</div>
+        <div class="note">ملاحظة: زر الإرسال يعتمد على إعدادات البريد في جهاز المستخدم. إن لم يعمل، استخدم زر "نسخ النص" ثم الصق الرسالة في بريدك وأرسِلها يدوياً.</div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // وظيفة نسخ النص إلى الحافظة + رسالة راحة
+    (function(){
+      const copyBtn = document.getElementById('copyBtn');
+      const toast = document.getElementById('toast');
+      const form = document.getElementById('mowqifForm');
+
+      copyBtn.addEventListener('click', async () => {
+        const name = document.getElementById('name').value.trim();
+        const story = document.getElementById('story').value.trim();
+        if (!story) {
+          alert('الرجاء كتابة الموقف أولاً قبل النسخ.');
+          return;
+        }
+        const full = `الاسم: ${name || 'غير مذكور'}\n\nالموقف:\n${story}`;
+        try {
+          await navigator.clipboard.writeText(full);
+          toast.style.display = 'block';
+          setTimeout(() => toast.style.display = 'none', 2500);
+        } catch (e) {
+          alert('لم يتمكن المتصفح من النسخ تلقائياً. اختر النص ونسخه يدوياً.');
+        }
+      });
+
+      // حماية بسيطة: تأكد من وجود نص قبل الإرسال (لـ mailto)
+      form.addEventListener('submit', function(e){
+        const story = document.getElementById('story').value.trim();
+        if (!story) {
+          e.preventDefault();
+          alert('الرجاء كتابة الموقف أولاً.');
+        }
+        // ملاحظة: لا يمكن إرسال POST تلقائياً عبر mailto في كل المتصفحات
+      });
+    })();
+  </script>
+</body>
+</html>
